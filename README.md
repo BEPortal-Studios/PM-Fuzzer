@@ -26,8 +26,9 @@ For each test, it records whether the command crashed, which value caused it, at
 use portalstudio\pmfuzzer\PMFuzzer;
 use portalstudio\pmfuzzer\payload\NumberPayload;
 use portalstudio\pmfuzzer\payload\StringPayload;
+use portalstudio\pmfuzzer\sender\FuzzCommandSender;
 
-$report = PMFuzzer::fuzz($command,
+$report = PMFuzzer::fuzz(new FuzzCommandSender(), $command,
     new StringPayload(), new NumberPayload());
 
 foreach ($report->getFailures() as $entry) {
@@ -56,7 +57,7 @@ foreach ($report->getFailures() as $entry) {
 Commands that check `instanceof Player` on the sender will return early before the arguments are even processed. In that case, consider passing a real online player as the sender:
 
 ```php
-PMFuzzer::fuzz($command, $realPlayer, new NumberPayload());
+PMFuzzer::fuzz($realPlayer, $command, new NumberPayload());
 ```
 
 ---

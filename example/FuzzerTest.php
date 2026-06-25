@@ -2,12 +2,13 @@
 
 use portalstudio\pmfuzzer\payload\NumberPayload;
 use portalstudio\pmfuzzer\PMFuzzer;
+use portalstudio\pmfuzzer\sender\FuzzCommandSender;
 
 class FuzzerTest
 {
     public function test(): void {
         $invalidCommand = new InvalidCommand();
-        $fuzzReport = PMFuzzer::fuzz($invalidCommand,
+        $fuzzReport = PMFuzzer::fuzz(new FuzzCommandSender(), $invalidCommand,
             payloadArgs: new NumberPayload());
         if ($fuzzReport->hasFailures()){
             var_dump("Some crashes...");

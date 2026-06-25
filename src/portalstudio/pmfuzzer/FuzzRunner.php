@@ -2,15 +2,14 @@
 
 namespace portalstudio\pmfuzzer;
 
+use pocketmine\command\CommandSender;
 use portalstudio\pmfuzzer\harvester\CommandInfo;
 use portalstudio\pmfuzzer\payload\Payload;
 use portalstudio\pmfuzzer\report\ReportEntry;
-use portalstudio\pmfuzzer\sender\FuzzCommandSender;
 
 class FuzzRunner
 {
-    public static function run(CommandInfo $commandInfo, array $payloads): array {
-        $sender = new FuzzCommandSender();
+    public static function run(CommandSender $sender, CommandInfo $commandInfo, array $payloads): array {
         $entries = [];
         foreach ($payloads as $position => $payload) {
             foreach ($payload->getValues() as $fuzzedValue) {
@@ -24,7 +23,7 @@ class FuzzRunner
         return $entries;
     }
 
-    private static function test(FuzzCommandSender $sender, CommandInfo $commandInfo, array $args, mixed $fuzzedValue, int $position, Payload $payload): ReportEntry {
+    private static function test(CommandSender $sender, CommandInfo $commandInfo, array $args, mixed $fuzzedValue, int $position, Payload $payload): ReportEntry {
         $instance = $commandInfo->getInstance();
         try {
             $instance->execute($sender, $instance->getName(), $args);
